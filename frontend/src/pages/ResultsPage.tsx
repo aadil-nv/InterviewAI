@@ -79,7 +79,6 @@ const ResultsPage = () => {
     return '💪 Room for Growth!';
   };
 
-  // Parse feedback to extract individual question feedbacks
   const parseFeedback = (feedback: string) => {
     if (!feedback) return [];
     
@@ -101,7 +100,6 @@ const ResultsPage = () => {
     <>
     <Navigation />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-6 sm:py-12 px-4 relative overflow-hidden">
-      {/* Confetti Animation for Excellent Score */}
       {showConfetti && currentInterview.score >= 8 && (
         <div className="fixed inset-0 pointer-events-none z-50">
           {[...Array(50)].map((_, i) => (
@@ -123,7 +121,6 @@ const ResultsPage = () => {
 
       <div className="container mx-auto max-w-4xl">
         <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8">
-          {/* Header Section */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="mb-4 flex justify-center">
               {getScoreIcon(currentInterview.score)}
@@ -136,7 +133,6 @@ const ResultsPage = () => {
             </p>
           </div>
 
-          {/* Score Card */}
           <div className={`bg-gradient-to-r ${getScoreGradient(currentInterview.score)} rounded-xl p-6 sm:p-8 mb-6 sm:mb-8 text-center shadow-md`}>
             <p className="text-sm sm:text-base text-gray-600 mb-2">Overall Score</p>
             <p className={`text-4xl sm:text-5xl lg:text-6xl font-bold mb-2 ${getScoreColor(currentInterview.score)} animate-scale-in`}>
@@ -146,7 +142,6 @@ const ResultsPage = () => {
               {getScoreLabel(currentInterview.score)}
             </p>
             
-            {/* Score Bar */}
             <div className="mt-4 w-full max-w-md mx-auto">
               <div className="w-full bg-gray-200 rounded-full h-3">
                 <div
@@ -160,7 +155,6 @@ const ResultsPage = () => {
             </div>
           </div>
 
-          {/* Detailed Feedback Section */}
           <div className="mb-6 sm:mb-8">
             <div className="flex items-center mb-4">
               <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
@@ -173,7 +167,6 @@ const ResultsPage = () => {
                   key={index} 
                   className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition"
                 >
-                  {/* Question Header */}
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-3 gap-2">
                     <p className="font-semibold text-sm sm:text-base text-gray-800 flex-1">
                       <span className="text-blue-600">Q{index + 1}:</span> {question}
@@ -189,7 +182,6 @@ const ResultsPage = () => {
                     )}
                   </div>
                   
-                  {/* User's Answer */}
                   <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-3 sm:mb-4">
                     <p className="text-xs sm:text-sm text-gray-500 mb-1 font-medium">Your Answer:</p>
                     <p className="text-sm sm:text-base text-gray-700 break-words">
@@ -197,7 +189,6 @@ const ResultsPage = () => {
                     </p>
                   </div>
 
-                  {/* AI Feedback */}
                   {questionFeedbacks[index] && (
                     <div className="bg-blue-50 rounded-lg p-3 sm:p-4">
                       <p className="text-xs sm:text-sm font-semibold text-blue-800 mb-2 flex items-center">
@@ -214,7 +205,6 @@ const ResultsPage = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               onClick={handleNewInterview}

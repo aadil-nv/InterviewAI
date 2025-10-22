@@ -47,7 +47,6 @@ const UploadPage = () => {
         setProgress((prev) => (prev >= 90 ? prev : prev + 10));
       }, 300);
 
-      // Extract text from PDF
       const extractedText = await extractTextFromPDF(file);
       if (type === 'resume') {
         setResumeText(extractedText);
@@ -55,7 +54,6 @@ const UploadPage = () => {
         setJdText(extractedText);
       }
 
-      // Upload to Cloudinary
       const folder = type === 'resume' ? 'resumes' : 'job_descriptions';
       const url = await uploadToCloudinary(file, folder);
 
@@ -165,7 +163,6 @@ const UploadPage = () => {
               </div>
             )}
 
-            {/* Resume Upload */}
             <div className="mb-6 sm:mb-8">
               <label className="block text-base sm:text-lg font-semibold text-gray-700 mb-3">
                 Resume (PDF, Max 2MB)
@@ -213,7 +210,6 @@ const UploadPage = () => {
               </div>
             </div>
 
-            {/* JD Upload */}
             <div className="mb-6 sm:mb-8">
               <label className="block text-base sm:text-lg font-semibold text-gray-700 mb-3">
                 Job Description (PDF, Max 2MB)

@@ -26,3 +26,28 @@ export interface InterviewState {
   currentInterview: Interview | null;
   loading: boolean;
 }
+
+
+export interface CreateInterviewRequest {
+  resumeUrl: string;
+  jdUrl: string;
+    resumeText: string;
+    jdText: string;
+    userId: string | undefined;
+}
+
+export interface SubmitInterviewResponse {
+  message: string;
+  result: any; // You can replace 'any' with your Interview type if available
+  score: number | null;
+  feedback: string | null;
+  answers: string[];
+}
+export interface GetAllInterviewsResponse {
+  interviews: Interview[]; 
+  message?: string;
+}
+
+export interface DeleteInterviewResponse {
+  message: string;
+}

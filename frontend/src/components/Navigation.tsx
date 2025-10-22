@@ -45,7 +45,6 @@ const Navigation = () => {
               <span className="text-2xl font-bold">InterviewAI</span>
             </div>
 
-            {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-4">
               {isAuthenticated ? (
                 <>
@@ -84,13 +83,11 @@ const Navigation = () => {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
             <button className="md:hidden" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden mt-4 space-y-2">
               {isAuthenticated ? (
@@ -138,7 +135,6 @@ const Navigation = () => {
         </div>
       </nav>
 
-      {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
 <div className="fixed inset-0 bg-gray-300/30 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">

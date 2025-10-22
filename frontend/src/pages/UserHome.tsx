@@ -99,7 +99,6 @@ const UserHome = () => {
     return 'Needs Work';
   };
 
-  // Pagination calculations
   const totalPages = Math.ceil(interviews.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -119,10 +118,8 @@ const UserHome = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
-      {/* Navigation Component */}
       <Navigation />
 
-      {/* Hero Section */}
       <div className="container mx-auto px-4 py-8 sm:py-16">
         <div className="text-center mb-8 sm:mb-16">
           <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6">
@@ -247,7 +244,6 @@ const UserHome = () => {
                     </table>
                   </div>
 
-                  {/* Mobile Card View */}
                   <div className="lg:hidden space-y-4">
                     {currentInterviews.map((interview) => {
                       if (!interview) return null;
@@ -314,7 +310,6 @@ const UserHome = () => {
                     })}
                   </div>
 
-                  {/* Pagination Controls */}
                   {totalPages > 1 && (
                     <div className="mt-6 flex flex-col sm:flex-row items-center justify-between border-t pt-4 gap-4">
                       <div className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
@@ -363,7 +358,6 @@ const UserHome = () => {
         )}
       </div>
 
-      {/* Document Preview Modal */}
       {previewDoc && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full h-[90vh] flex flex-col">

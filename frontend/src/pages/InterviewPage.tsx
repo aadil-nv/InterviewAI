@@ -103,7 +103,6 @@ const InterviewPage = () => {
 
   return (
     <>
-      {/* Navigation Component */}
       
       <Navigation />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-6 sm:py-12 px-4">
@@ -115,7 +114,6 @@ const InterviewPage = () => {
             </div>
           )}
 
-          {/* Header Section */}
           <div className="mb-4 sm:mb-6">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
               <h2 className="text-xl sm:text-2xl font-bold text-gray-800">
@@ -127,7 +125,6 @@ const InterviewPage = () => {
               </div>
             </div>
             
-            {/* Progress Bar */}
             <div className="w-full bg-gray-200 rounded-full h-2">
               <div
                 className="bg-gradient-to-r from-blue-600 to-purple-600 h-2 rounded-full transition-all duration-300"
@@ -138,7 +135,6 @@ const InterviewPage = () => {
             </div>
           </div>
 
-          {/* Question and Answer Section */}
           <div className="mb-6 sm:mb-8">
             <p className="text-base sm:text-lg lg:text-xl text-gray-800 mb-4 sm:mb-6 leading-relaxed">
               {currentInterview.questions[currentQuestion]}
@@ -171,9 +167,7 @@ const InterviewPage = () => {
             </div>
           </div>
 
-          {/* Navigation Buttons */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            {/* Previous Button */}
             <button
               onClick={handlePreviousQuestion}
               disabled={currentQuestion === 0 || loading}
@@ -182,12 +176,10 @@ const InterviewPage = () => {
               Previous
             </button>
 
-            {/* Answer Counter */}
             <div className="text-xs sm:text-sm text-gray-600 font-medium order-first sm:order-none">
               {answers.filter(a => a && a.trim().length >= 3).length} / {currentInterview.questions.length} answered
             </div>
 
-            {/* Next/Submit Button */}
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}

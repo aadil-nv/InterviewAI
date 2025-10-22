@@ -24,7 +24,6 @@ export const interviewSlice = createSlice({
     },
     updateCurrentInterview: (state, action: PayloadAction<Interview>) => {
       state.currentInterview = action.payload;
-      // Also update in the interviews array if it exists
       const index = state.interviews.findIndex(i => i.id === action.payload.id);
       if (index !== -1) {
         state.interviews[index] = action.payload;

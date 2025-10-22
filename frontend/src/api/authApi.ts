@@ -3,10 +3,9 @@ import toast from "react-hot-toast";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// ✅ create a shared axios instance
 export const apiInstance = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // ✅ ensures cookies are always sent
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -27,7 +26,6 @@ interface AuthResponse {
   message?: string;
 }
 
-// ✅ Register API
 export const registerApi = async (payload: RegisterPayload): Promise<AuthResponse> => {
   try {
     const { data } = await apiInstance.post("/auth/register", payload);
@@ -41,7 +39,6 @@ export const registerApi = async (payload: RegisterPayload): Promise<AuthRespons
   }
 };
 
-// ✅ Login API
 export const loginApi = async (payload: Omit<RegisterPayload, "userName">): Promise<AuthResponse> => {
   try {
     const { data } = await apiInstance.post("/auth/login", payload);
