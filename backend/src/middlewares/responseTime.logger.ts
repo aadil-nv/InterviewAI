@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 const responseTimeLogger = (req: Request, res: Response, next: NextFunction) => {
+  
   const start = Date.now();
 
   res.on("finish", () => {

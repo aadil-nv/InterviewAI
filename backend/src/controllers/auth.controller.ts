@@ -22,14 +22,14 @@ export class AuthController implements IAuthController {
       const { accessToken, refreshToken, user } = await this.authService.register(dto);
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: config.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE) 
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: config.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: Number(config.REFRESH_TOKEN_MAX_AGE)
       });
@@ -47,14 +47,14 @@ export class AuthController implements IAuthController {
       const { accessToken, refreshToken, user } = await this.authService.login(dto.email, dto.password);
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: config.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE)
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: config.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: Number(config.REFRESH_TOKEN_MAX_AGE)
       });
@@ -80,7 +80,7 @@ export class AuthController implements IAuthController {
 
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: config.NODE_ENV === "production",
         sameSite: "strict",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE)
       });
