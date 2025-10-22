@@ -8,6 +8,9 @@ import { IAuthService } from "../services/interfaces/auth.service.interface";
 import { config } from "../config/env";
 import { IAuthController } from "./interfaces/auth.controller.interface";
 
+console.log("NODEENV is ",config.NODE_ENV);
+
+
 @injectable()
 export class AuthController implements IAuthController {
   constructor(
