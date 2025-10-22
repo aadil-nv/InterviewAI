@@ -8,7 +8,6 @@ import { submitInterviewAPI } from '../api/interviewApi';
 
 const InterviewPage = () => {
   const { currentInterview, loading } = useSelector((state: RootState) => state.interview);
-  console.log("redux current interview", currentInterview);
   
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -68,23 +67,18 @@ const InterviewPage = () => {
     try {
       setError('');
       dispatch(setLoading(true));
-
-      // Submit answers to backend
       const response = await submitInterviewAPI(currentInterview.id, answers, userId);
-      console.log("response from =====>", response);
 
-      // Update current interview with the result from backend
       const updatedInterview = {
         ...currentInterview,
         answers: response.result.answers,
         score: response.result.score,
-        feedback: response.result.feedback, // Add feedback from backend
+        feedback: response.result.feedback,
       };
 
       dispatch(updateCurrentInterview(updatedInterview));
       dispatch(setLoading(false));
       
-      // Navigate to results page
       navigate('/results');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to submit interview');
