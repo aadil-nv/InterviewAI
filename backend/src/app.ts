@@ -21,7 +21,7 @@ export function createApp(): Application {
   app.use(helmet());
   app.use(corsMiddleware);
   app.use(cookieParser());
-  app.use(express.json({ limit: "1mb" }));
+  app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
   app.use(morgan(config.NODE_ENV === "production" ? "combined" : "dev"));
