@@ -4,8 +4,8 @@ import { UserRole } from "../src/interfaces/user.interface";
 describe("Auth Controller", () => {
   it("should return user response DTO", () => {
     const mockUser: UserResponseDTO = {
-      id: "123",
-      name: "Test User",
+      _id: "123",
+      userName: "Test User",
       email: "test@example.com",
       role: UserRole.Admin // ✅ matches enum type
     };

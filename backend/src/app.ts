@@ -18,18 +18,15 @@ import interviewRoute from "./routes/interview.route";
 export function createApp(): Application {
   const app: Application = express();
 
-  // Security and Middleware
   app.use(helmet());
   app.use(corsMiddleware);
   app.use(cookieParser());
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: true }));
 
-  // Logging
   app.use(morgan(config.NODE_ENV === "production" ? "combined" : "dev"));
   app.use(responseTimeLogger);
 
-  // Rate Limiting
   const limiter = rateLimit({
     windowMs: config.RATE_LIMIT_WINDOW_MS,
     max: config.RATE_LIMIT_MAX,

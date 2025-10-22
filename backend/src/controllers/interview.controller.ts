@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { inject, injectable } from "inversify";
 import { IInterviewController } from "./interfaces/interview.controller.interface";
 import { IInterviewService } from "../services/interfaces/interview.service.interface";
+import { HttpStatusCode } from '../constants/http-status-code.enum';
+
 
 @injectable()
 export class InterviewController implements IInterviewController {
@@ -32,20 +34,18 @@ export class InterviewController implements IInterviewController {
     }
   }
 
-  async getAllInterviewsByUser(_req: Request, res: Response): Promise<void> {
-    console.log("calling all interviews ");
-    
+  async getAllInterviewsByUser(_req: Request, res: Response): Promise<void> {    
     try {
       const { id } = _req.params;
       if (!id) {
-        res.status(400).json({ message: "User ID is required" });
+        res.status(HttpStatusCode.BAD_REQUEST).json({ message: "User ID is required" });
         return;
       }
       const interviews = await this.interviewService.getAllInterviewsByUser(id);
-      res.status(200).json({interviews});
+      res.status(HttpStatusCode.OK).json({interviews});
     } catch (error: any) {
       console.error("Error fetching interviews:", error);
-      res.status(500).json({ message: "Failed to fetch interviews" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Failed to fetch interviews" });
     }
   }
 
@@ -55,14 +55,14 @@ export class InterviewController implements IInterviewController {
       const interview = await this.interviewService.getInterviewById(id);
 
       if (!interview) {
-        res.status(404).json({ message: "Interview not found" });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: "Interview not found" });
         return;
       }
 
-      res.status(200).json(interview);
+      res.status(HttpStatusCode.OK).json(interview);
     } catch (error: any) {
       console.error("Error fetching interview:", error);
-      res.status(500).json({ message: "Failed to fetch interview" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Failed to fetch interview" });
     }
   }
 
@@ -79,31 +79,30 @@ export class InterviewController implements IInterviewController {
       const result = await this.interviewService.submitAnswers(id, answers ,userId);
       
       if (!result) {
-        res.status(404).json({ message: "Interview not found" });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: "Interview not found" });
         return;
       }
 
-      res.status(200).json({ message: "Answers submitted successfully", result });
+      res.status(HttpStatusCode.OK).json({ message: "Answers submitted successfully", result });
     } catch (error: any) {
       console.error("Error submitting answers:", error);
-      res.status(500).json({ message: "Failed to submit answers" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Failed to submit answers" });
     }
   }
 
   async deleteInterview(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      // Assuming you have a delete method in your service
       const deleted = await this.interviewService.deleteInterview(id);
       if (!deleted) {
-        res.status(404).json({ message: "Interview not found" });
+        res.status(HttpStatusCode.NOT_FOUND).json({ message: "Interview not found" });
         return;
       }
-      res.status(200).json({ message: "Interview deleted successfully" });
+      res.status(HttpStatusCode.OK).json({ message: "Interview deleted successfully" });
     }
     catch (error: any) {
       console.error("Error deleting interview:", error);
-      res.status(500).json({ message: "Failed to delete interview" });
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json({ message: "Failed to delete interview" });
     }
   }
   }
