@@ -26,14 +26,14 @@ export class AuthController implements IAuthController {
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: config.NODE_ENV === "production" ? "none" : "lax",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE) 
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: config.NODE_ENV === "production" ? "none" : "lax",
         maxAge: Number(config.REFRESH_TOKEN_MAX_AGE)
       });
 
@@ -52,14 +52,14 @@ export class AuthController implements IAuthController {
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: config.NODE_ENV === "production" ? "none" : "lax",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE)
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: config.NODE_ENV === "production" ? "none" : "lax",
         maxAge: Number(config.REFRESH_TOKEN_MAX_AGE)
       });
 
@@ -89,7 +89,7 @@ export class AuthController implements IAuthController {
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: config.NODE_ENV === "production" ? "none" : "lax",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE)
       });
 
