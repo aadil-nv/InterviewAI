@@ -21,6 +21,7 @@ export interface EnvConfig {
   CLOUDINARY_UPLOAD_PRESET: string;
   OPENAI_API_KEY: string;
   GEMINI_API_KEY: string;
+  CORS_ORIGINS: string;
 }
 
 function parseNumber(value: string | undefined, name: string): number {
@@ -48,7 +49,8 @@ function getEnv(): EnvConfig {
     CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_UPLOAD_PRESET,
     OPENAI_API_KEY,
-    GEMINI_API_KEY
+    GEMINI_API_KEY,
+  CORS_ORIGINS
   } = process.env;
 
   if (!NODE_ENV) throw new Error('NODE_ENV is required');
@@ -68,6 +70,7 @@ function getEnv(): EnvConfig {
   if (!CLOUDINARY_UPLOAD_PRESET) throw new Error('CLOUDINARY_UPLOAD_PRESET is required');
   if (!OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is required');
   if (!GEMINI_API_KEY) throw new Error('GEMINI_API_KEY is required');
+  if (!CORS_ORIGINS) throw new Error('CORS_ORIGINS is required');
 
 
 
@@ -88,7 +91,8 @@ function getEnv(): EnvConfig {
     CLOUDINARY_CLOUD_NAME,
     CLOUDINARY_UPLOAD_PRESET,
     OPENAI_API_KEY,
-    GEMINI_API_KEY
+    GEMINI_API_KEY,
+    CORS_ORIGINS,
   };
 }
 

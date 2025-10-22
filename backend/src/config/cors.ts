@@ -1,8 +1,9 @@
 import cors from 'cors';
+import { config } from './env';
 
 // List of allowed origins
 const allowedOrigins = [
-  'http://localhost:5173'
+  config.CORS_ORIGINS
 ];
 
 const corsOptions: cors.CorsOptions = {
