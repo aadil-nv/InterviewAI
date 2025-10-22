@@ -1,22 +1,15 @@
-import cors from 'cors';
-import { config } from './env';
+import cors, { CorsOptions } from "cors";
+import { config } from "./env";
 
-// List of allowed origins
-const allowedOrigins = [
-  config.CORS_ORIGINS
-];
+console.log("Allowed CORS Origins:", config.CORS_ORIGINS);
 
-const corsOptions: cors.CorsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests like Postman
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  credentials: true, // allow cookies
+export const corsOptions: CorsOptions = {
+  origin: config.CORS_ORIGINS, // Default to localhost if not set
+  methods: "GET,POST,PUT,DELETE,PATCH",
+  allowedHeaders: "Content-Type,Authorization",
+  credentials: true,
 };
 
-export default cors(corsOptions);
+const corsMiddleware = cors(corsOptions);
+
+export default corsMiddleware;
