@@ -77,7 +77,7 @@ export class AuthController implements IAuthController {
     
     try {
       const refreshToken = req.cookies.refreshToken; 
-      console.log("refresh token is ==>",req.cookies);
+      console.log("refresh token is ==>",req.cookies.refreshToken);
       
       if (!refreshToken || !req.cookies.refreshToken) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Refresh token required" });
