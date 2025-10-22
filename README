@@ -1,88 +1,328 @@
-# CollectPro – Collections Management Platform (MERN Stack)
+# 🎯 InterviewAI
 
-## 📌 Overview
-CollectPro is a high-performance collections management platform built using the MERN stack.  
-It is designed to handle **100,000+ concurrent users**, process **50,000+ API requests per minute**,  
-and deliver real-time updates for payments and account activities.
+> Master Your Next Interview with AI-Powered Practice
 
-This project is part of a **Senior Backend Developer Machine Test**  
-with a focus on **scalability, performance, and production readiness**.
+InterviewAI is a full-stack platform that helps job seekers prepare for interviews using artificial intelligence. Upload your resume and job description, get personalized interview questions, and receive detailed AI-powered feedback on your answers.
 
----
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)
+![Node.js](https://img.shields.io/badge/Node.js-43853D?logo=node.js&logoColor=white)
 
-## 🚀 Tech Stack
+## ✨ Features
+
+### 🔐 Authentication & Authorization
+- User registration and login with email and password
+- JWT-based access and refresh token authentication
+- Secure cookie handling (httpOnly, sameSite, secure)
+- Protected routes with middleware
+
+### 📝 Interview Management
+- Upload resume and job description (PDF format)
+- AI-generated personalized interview questions
+- Real-time answer validation (minimum 3 characters)
+- Detailed feedback and scoring for each answer
+- Interview history with pagination
+- Create, update, delete, and fetch interviews
+
+### 📊 Analytics & Reporting
+- Comprehensive scoring system (0-10 scale)
+- Performance tracking across multiple interviews
+- Detailed feedback for each question
+- Visual progress indicators
+
+### 🎨 Frontend Features
+- Fully responsive mobile-first design
+- Beautiful animations and transitions
+- React + TypeScript + Tailwind CSS
+- Redux for state management
+- Axios with automatic token refresh
+- Toast notifications for user feedback
+- Drag-and-drop file upload
+- Real-time upload progress indicators
+
+### 🔒 Security & Performance
+- Rate limiting
+- Helmet for security headers
+- CORS configuration for production
+- Logging with morgan
+- Comprehensive error handling
+- MongoDB and Redis integration
+
+## 🏗️ Project Structure
+
+```
+InterviewAI/
+├── backend/
+│   ├── src/
+│   │   ├── config/          # Environment, CORS, DB, logger
+│   │   ├── controllers/     # AuthController, UserController, InterviewController
+│   │   ├── dtos/            # Data transfer objects
+│   │   ├── interfaces/      # Types and interfaces
+│   │   ├── middlewares/     # Auth, error handling, logging
+│   │   ├── models/          # MongoDB models (User, Interview)
+│   │   ├── repositories/    # Database access layer
+│   │   ├── routes/          # Express routes
+│   │   ├── services/        # Business logic
+│   │   ├── utils/           # JWT utils, helpers
+│   │   ├── constants/       # HTTP codes, messages
+│   │   ├── types/           # Custom types
+│   │   ├── app.ts           # Express app setup
+│   │   └── server.ts        # Entry point
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── .env
+│
+└── frontend/
+    ├── src/
+    │   ├── api/             # Axios instance, API calls
+    │   ├── app/             # Redux store configuration
+    │   ├── components/      # Reusable React components
+    │   ├── features/        # Redux slices (auth, interview)
+    │   ├── pages/           # Page components
+    │   ├── interfaces/      # TypeScript interfaces
+    │   ├── utils/           # Helper functions
+    │   └── main.tsx         # Entry point
+    ├── package.json
+    ├── tsconfig.json
+    ├── tailwind.config.js
+    └── vite.config.ts
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- MongoDB (local or Atlas)
+- Redis (optional, for caching)
+- npm or yarn
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/interviewai.git
+   cd interviewai
+   ```
+
+2. **Backend Setup**
+   ```bash
+   cd backend
+   npm install
+   ```
+
+   Create a `.env` file in the backend directory:
+   ```env
+   NODE_ENV=development
+   PORT=5000
+   CORS_ORIGINS=http://localhost:5173
+   MONGO_URI=your_mongodb_connection_string
+   REDIS_URL=redis://localhost:6379
+   
+   # JWT Configuration
+   JWT_SECRET=your_jwt_secret
+   ACCESS_TOKEN_SECRET=your_access_token_secret
+   REFRESH_TOKEN_SECRET=your_refresh_token_secret
+   ACCESS_TOKEN_EXPIRY=15m
+   REFRESH_TOKEN_EXPIRY=7d
+   ACCESS_TOKEN_MAX_AGE=900000
+   REFRESH_TOKEN_MAX_AGE=604800000
+   
+   # Rate Limiting
+   RATE_LIMIT_WINDOW_MS=60000
+   RATE_LIMIT_MAX=1000
+   
+   # Cloudinary Configuration
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_UPLOAD_PRESET=your_upload_preset
+   
+   # AI API Keys
+   OPENAI_API_KEY=your_openai_api_key
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
+
+   Start the backend server:
+   ```bash
+   npm run dev
+   ```
+
+3. **Frontend Setup**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
+
+   Create a `.env` file in the frontend directory:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   VITE_CLOUDINARY_CLOUD_NAME=your_cloud_name
+   VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
+   VITE_OPENAI_API_KEY=your_openai_api_key
+   GEMINI_API_KEY=your_gemini_api_key
+   VITE_NODE_ENV=development
+   ```
+
+   Start the frontend development server:
+   ```bash
+   npm run dev
+   ```
+
+4. **Access the application**
+   - Frontend: http://localhost:5173
+   - Backend: http://localhost:5000
+
+## 📡 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login user
+- `POST /api/auth/refresh-token` - Refresh access token
+- `POST /api/auth/logout` - Logout user
+
+### Interviews
+- `GET /api/interviews/all/:userId` - Fetch all interviews for a user
+- `POST /api/interviews/create` - Create a new interview
+- `PUT /api/interviews/:id` - Update interview
+- `DELETE /api/interviews/:id` - Delete interview
+- `POST /api/interviews/submit` - Submit interview answers
+
+### Users
+- `GET /api/users/:id` - Get user details
+
+## 🛠️ Tech Stack
+
 ### Backend
-- **Runtime:** Node.js (v18+)
-- **Framework:** Express.js
-- **Database:** MongoDB (Mongoose)
-- **Caching:** Redis
-- **Authentication:** JWT (Access & Refresh Tokens)
-- **Password Hashing:** bcrypt
-- **Queue Processing:** BullMQ + Redis
-- **Real-Time Updates:** WebSocket (Socket.io)
-- **Documentation:** Swagger (OpenAPI)
-- **Testing:** Jest + Supertest
-- **Load Testing:** Artillery / k6
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Language**: TypeScript
+- **Database**: MongoDB (Mongoose)
+- **Cache**: Redis
+- **Authentication**: JWT (jsonwebtoken)
+- **File Upload**: Cloudinary
+- **AI Integration**: OpenAI GPT / Google Gemini
+- **Security**: Helmet, bcrypt, express-rate-limit
+- **Logging**: Morgan
+- **Validation**: Custom DTOs
 
 ### Frontend
-- **Framework:** React.js (Vite or CRA)
-- **State Management:** Redux Toolkit + RTK Query
-- **UI Library:** Tailwind CSS
-- **Routing:** React Router
-- **Testing:** React Testing Library + Cypress (E2E)
+- **Framework**: React 18
+- **Language**: TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **State Management**: Redux Toolkit
+- **HTTP Client**: Axios
+- **Routing**: React Router v6
+- **Icons**: Lucide React
+- **Notifications**: React Toastify
+- **PDF Processing**: pdf-parse
+
+## 🎨 Features in Detail
+
+### Document Upload
+- Drag-and-drop interface
+- PDF format support (max 2MB)
+- Real-time upload progress
+- Cloudinary integration for secure storage
+- Automatic text extraction from PDFs
+
+### Interview Questions
+- AI-generated based on resume and job description
+- Personalized to job requirements
+- Multiple questions per interview
+- Progress tracking
+
+### Answer Validation
+- Minimum 3 characters required
+- Real-time character count
+- Visual feedback (answered/pending)
+- Submit only when all questions answered
+
+### Feedback & Scoring
+- Overall score (0-10 scale)
+- Individual question scores
+- Detailed AI feedback for improvement
+- Performance categories: Excellent (8-10), Good (5-7), Needs Improvement (0-4)
+- Visual animations based on performance
+
+### Interview History
+- Paginated table view (5 items per page)
+- Mobile-responsive card layout
+- Filter by date and score
+- Quick actions (delete)
+- Empty state handling
+
+## 🎯 Usage
+
+1. **Sign Up / Login**
+   - Create an account or login with existing credentials
+
+2. **Upload Documents**
+   - Navigate to the upload page
+   - Upload your resume (PDF)
+   - Upload job description (PDF)
+   - Click "Generate Interview Questions"
+
+3. **Answer Questions**
+   - Review AI-generated questions
+   - Type detailed answers (min 3 characters)
+   - Navigate between questions
+   - Submit when complete
+
+4. **Review Results**
+   - View overall score with visual feedback
+   - Read detailed feedback for each question
+   - Celebrate with animations for high scores!
+   - Return to dashboard or start new interview
+
+5. **Track Progress**
+   - View interview history
+   - Track scores over time
+   - Delete old interviews
+
+## 🔒 Security Best Practices
+
+- Passwords hashed with bcrypt
+- HTTP-only secure cookies
+- CORS protection
+- Rate limiting on all endpoints
+- JWT token rotation
+- Input validation and sanitization
+- Helmet security headers
+- Environment variables for secrets
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Aadil NV**
+- Email: [aadilnv.dev@gmail.com](mailto:aadilnv.dev@gmail.com)
+- GitHub: [@aadilnv](https://github.com/aadilnv)
+
+## 🙏 Acknowledgments
+
+- OpenAI for GPT API
+- Google for Gemini API
+- Cloudinary for file storage
+- MongoDB Atlas for database hosting
+- All open-source contributors
+
+## 📞 Support
+
+For support, email aadilnv.dev@gmail.com or open an issue in the GitHub repository.
 
 ---
 
-## 🛠 Features
-### 1. Authentication & Security
-- User registration & login with JWT
-- Role-based access control (Admin, Manager, Agent, Viewer)
-- Password hashing using bcrypt
-- Account lockout after failed attempts
-- API rate limiting & CORS configuration
-- Input validation & sanitization
-
-### 2. Collections Management API
-- **Accounts**
-  - List accounts (pagination, filtering, sorting)
-  - Create, update, soft delete accounts
-  - Get account details by ID
-- **Payments**
-  - Record payment
-  - Payment history retrieval
-  - Update payment status
-- **Activities**
-  - Log activity
-  - View activity timeline
-  - Bulk activity retrieval
-- **Bulk Operations**
-  - Efficiently update 10,000+ accounts using queues
-  - Partial failure handling
-  - Progress tracking
-
-### 3. Performance Optimization
-- Database connection pooling
-- Proper indexing for large datasets
-- Redis caching for frequently accessed data
-- API response caching with invalidation
-- Horizontal scaling support
-
-### 4. Real-Time Features
-- Live payment notifications
-- Activity feed streaming
-- Dashboard auto-refresh
-
-### 5. Monitoring & Logs
-- Winston logger
-- API performance metrics
-- Database query tracking
-- Health check endpoints
-
----
-
-## 📂 Project Structure
-
-Start Backend           = npm start
-ERROR Checking (Jest)   = npx tsc --noEmit
-Start Redis in Docker   = docker start my-redis
-Run Testing             = npx jest
+Made with ❤️ by Aadil NV
