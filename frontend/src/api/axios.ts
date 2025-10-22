@@ -26,7 +26,7 @@ export const apiInstance: AxiosInstance = axios.create({
 const handleTokenRefresh = async (originalRequest: InternalAxiosRequestConfig) => {
   try {
     // Example: call refresh token endpoint if you have one
-    await apiInstance.post("/auth/refresh-token");
+    await axios.post(`${API_URL}/auth/refresh-token`, {}, { withCredentials: true });
     return apiInstance(originalRequest);
   } catch (err) {
     await handleTokenError(err as AxiosError);
