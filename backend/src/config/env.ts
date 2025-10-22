@@ -75,7 +75,7 @@ function getEnv(): EnvConfig {
 
 
   return {
-    NODE_ENV: NODE_ENV === 'production' ? 'production' : NODE_ENV === 'test' ? 'test' : 'development',
+    NODE_ENV: NODE_ENV === 'production' ? 'production' : NODE_ENV === 'development' ? 'development' : 'test',
     PORT: parseNumber(PORT, 'PORT'),
     MONGO_URI,
     REDIS_URL,

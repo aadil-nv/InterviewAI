@@ -19,7 +19,7 @@ interface AuthResponse {
 
 export const registerApi = async (payload: RegisterPayload): Promise<AuthResponse> => {
   try {
-    const { data } = await axios.post<AuthResponse>(
+    const { data } = await axios.post(
       `${import.meta.env.VITE_API_URL}/auth/register`,
       payload,
       { withCredentials: true }
@@ -35,7 +35,7 @@ export const registerApi = async (payload: RegisterPayload): Promise<AuthRespons
 
 export const loginApi = async (payload: Omit<RegisterPayload, "userName">): Promise<AuthResponse> => {
   try {
-    const { data } = await axios.post<AuthResponse>(
+    const { data } = await axios.post(
       `${import.meta.env.VITE_API_URL}/auth/login`,
       payload,
       { withCredentials: true } 
