@@ -5,6 +5,7 @@ import type { AppDispatch } from "../app/store";
 import { login } from "../features/authSlice";
 import { useNavigate } from "react-router-dom";
 import { registerApi } from "../api/authApi";
+import Navigation from "../components/Navigation";
 
 const SignupPage: React.FC = () => {
   const [userName, setUserName] = useState("");
@@ -27,7 +28,6 @@ const SignupPage: React.FC = () => {
         password,
       });
 
-      // ✅ update redux store
       dispatch(
         login({
           _id: data.user._id,
@@ -47,6 +47,8 @@ const SignupPage: React.FC = () => {
   };
 
   return (
+    <>
+    <Navigation />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-8">
       <style>{`
         @keyframes fadeIn {
@@ -163,6 +165,7 @@ const SignupPage: React.FC = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

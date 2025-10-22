@@ -5,6 +5,7 @@ import { login } from "../features/authSlice";
 import { loginApi } from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import Navigation from "../components/Navigation";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,8 @@ const Login = () => {
   };
 
   return (
+    <>
+    <Navigation />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center px-4 py-8">
       <style>{`
         @keyframes fadeIn {
@@ -140,6 +143,7 @@ const Login = () => {
         </p>
       </div>
     </div>
+    </>
   );
 };
 

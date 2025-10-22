@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { uploadToCloudinary } from '../api/cloudinaryApi';
 import { createInterviewAPI } from '../api/interviewApi';
 import { extractTextFromPDF } from '../utils/pdfUtils';
+import Navigation from '../components/Navigation';
 
 const UploadPage = () => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -147,92 +148,137 @@ const UploadPage = () => {
   const isUploading = uploadingResume || uploadingJd;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-12 px-4">
-      <div className="container mx-auto max-w-4xl">
-        <h1 className="text-4xl font-bold text-gray-800 mb-8 text-center">Upload Your Documents</h1>
+    <>
+      <Navigation />
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-6 sm:py-12 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-6 sm:mb-8 text-center">
+            Upload Your Documents
+          </h1>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
-              <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
-              <p className="text-red-800">{error}</p>
-            </div>
-          )}
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:p-8 mb-8">
+            {error && (
+              <div className="mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg flex items-start">
+                <AlertCircle className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" />
+                <p className="text-sm sm:text-base text-red-800">{error}</p>
+              </div>
+            )}
 
-          {/* Resume Upload */}
-          <div className="mb-8">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">Resume (PDF, Max 2MB)</label>
-            <div
-              onDragOver={(e) => { e.preventDefault(); setIsDragging('resume'); }}
-              onDragLeave={() => setIsDragging(null)}
-              onDrop={(e) => handleFileDrop(e, 'resume')}
-              onClick={() => !uploadingResume && resumeInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition ${
-                isDragging === 'resume' ? 'border-blue-500 bg-blue-50' : uploadingResume ? 'border-gray-300 cursor-not-allowed' : 'border-gray-300 hover:border-blue-400'
-              }`}
-            >
-              <input ref={resumeInputRef} type="file" accept=".pdf" onChange={(e) => handleFileSelect(e, 'resume')} className="hidden" disabled={uploadingResume} />
-              <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-600 mb-2">{resumeFile ? resumeFile.name : 'Drag & drop your resume or click to browse'}</p>
-              {resumeFile && resumeProgress < 100 && (
-                <div className="mt-4">
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-blue-600 h-2 rounded-full transition-all duration-300" style={{ width: `${resumeProgress}%` }} />
+            {/* Resume Upload */}
+            <div className="mb-6 sm:mb-8">
+              <label className="block text-base sm:text-lg font-semibold text-gray-700 mb-3">
+                Resume (PDF, Max 2MB)
+              </label>
+              <div
+                onDragOver={(e) => { e.preventDefault(); setIsDragging('resume'); }}
+                onDragLeave={() => setIsDragging(null)}
+                onDrop={(e) => handleFileDrop(e, 'resume')}
+                onClick={() => !uploadingResume && resumeInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition ${
+                  isDragging === 'resume' ? 'border-blue-500 bg-blue-50' : uploadingResume ? 'border-gray-300 cursor-not-allowed' : 'border-gray-300 hover:border-blue-400'
+                }`}
+              >
+                <input 
+                  ref={resumeInputRef} 
+                  type="file" 
+                  accept=".pdf" 
+                  onChange={(e) => handleFileSelect(e, 'resume')} 
+                  className="hidden" 
+                  disabled={uploadingResume} 
+                />
+                <Upload className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-400" />
+                <p className="text-sm sm:text-base text-gray-600 mb-2 px-2">
+                  {resumeFile ? resumeFile.name : 'Drag & drop your resume or click to browse'}
+                </p>
+                {resumeFile && resumeProgress < 100 && (
+                  <div className="mt-4">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${resumeProgress}%` }} 
+                      />
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                      Uploading... {resumeProgress}%
+                    </p>
                   </div>
-                  <p className="text-sm text-gray-600 mt-2">Uploading... {resumeProgress}%</p>
-                </div>
-              )}
-              {resumeProgress === 100 && resumeUrl && (
-                <div className="mt-4 flex items-center justify-center text-green-600">
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  <span>Uploaded successfully</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* JD Upload */}
-          <div className="mb-8">
-            <label className="block text-lg font-semibold text-gray-700 mb-3">Job Description (PDF, Max 2MB)</label>
-            <div
-              onDragOver={(e) => { e.preventDefault(); setIsDragging('jd'); }}
-              onDragLeave={() => setIsDragging(null)}
-              onDrop={(e) => handleFileDrop(e, 'jd')}
-              onClick={() => !uploadingJd && jdInputRef.current?.click()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition ${
-                isDragging === 'jd' ? 'border-purple-500 bg-purple-50' : uploadingJd ? 'border-gray-300 cursor-not-allowed' : 'border-gray-300 hover:border-purple-400'
-              }`}
-            >
-              <input ref={jdInputRef} type="file" accept=".pdf" onChange={(e) => handleFileSelect(e, 'jd')} className="hidden" disabled={uploadingJd} />
-              <FileText className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-              <p className="text-gray-600 mb-2">{jdFile ? jdFile.name : 'Drag & drop job description or click to browse'}</p>
-              {jdFile && jdProgress < 100 && (
-                <div className="mt-4">
-                  <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-purple-600 h-2 rounded-full transition-all duration-300" style={{ width: `${jdProgress}%` }} />
+                )}
+                {resumeProgress === 100 && resumeUrl && (
+                  <div className="mt-4 flex items-center justify-center text-green-600">
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    <span className="text-sm sm:text-base">Uploaded successfully</span>
                   </div>
-                  <p className="text-sm text-gray-600 mt-2">Uploading... {jdProgress}%</p>
-                </div>
-              )}
-              {jdProgress === 100 && jdUrl && (
-                <div className="mt-4 flex items-center justify-center text-green-600">
-                  <CheckCircle className="w-5 h-5 mr-2" />
-                  <span>Uploaded successfully</span>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
 
-          <button
-            onClick={generateQuestions}
-            disabled={!isUploadComplete || isUploading || loading}
-            className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
-          >
-            {loading ? <><Loader2 className="w-5 h-5 animate-spin" /><span>Generating Questions...</span></> : <span>Generate Interview Questions</span>}
-          </button>
+            {/* JD Upload */}
+            <div className="mb-6 sm:mb-8">
+              <label className="block text-base sm:text-lg font-semibold text-gray-700 mb-3">
+                Job Description (PDF, Max 2MB)
+              </label>
+              <div
+                onDragOver={(e) => { e.preventDefault(); setIsDragging('jd'); }}
+                onDragLeave={() => setIsDragging(null)}
+                onDrop={(e) => handleFileDrop(e, 'jd')}
+                onClick={() => !uploadingJd && jdInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-lg p-6 sm:p-8 text-center cursor-pointer transition ${
+                  isDragging === 'jd' ? 'border-purple-500 bg-purple-50' : uploadingJd ? 'border-gray-300 cursor-not-allowed' : 'border-gray-300 hover:border-purple-400'
+                }`}
+              >
+                <input 
+                  ref={jdInputRef} 
+                  type="file" 
+                  accept=".pdf" 
+                  onChange={(e) => handleFileSelect(e, 'jd')} 
+                  className="hidden" 
+                  disabled={uploadingJd} 
+                />
+                <FileText className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-400" />
+                <p className="text-sm sm:text-base text-gray-600 mb-2 px-2">
+                  {jdFile ? jdFile.name : 'Drag & drop job description or click to browse'}
+                </p>
+                {jdFile && jdProgress < 100 && (
+                  <div className="mt-4">
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-purple-600 h-2 rounded-full transition-all duration-300" 
+                        style={{ width: `${jdProgress}%` }} 
+                      />
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-600 mt-2">
+                      Uploading... {jdProgress}%
+                    </p>
+                  </div>
+                )}
+                {jdProgress === 100 && jdUrl && (
+                  <div className="mt-4 flex items-center justify-center text-green-600">
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    <span className="text-sm sm:text-base">Uploaded successfully</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <button
+              onClick={generateQuestions}
+              disabled={!isUploadComplete || isUploading || loading}
+              className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg text-sm sm:text-base font-semibold hover:shadow-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <span>Generating Questions...</span>
+                </>
+              ) : (
+                <span>Generate Interview Questions</span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

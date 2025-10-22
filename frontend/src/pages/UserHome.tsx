@@ -72,8 +72,6 @@ const UserHome = () => {
     }
   };
 
- 
-
   const formatDate = (dateString: string) => {
     if (!dateString) return 'N/A';
     try {
@@ -125,33 +123,33 @@ const UserHome = () => {
       <Navigation />
 
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold text-gray-800 mb-6">
+      <div className="container mx-auto px-4 py-8 sm:py-16">
+        <div className="text-center mb-8 sm:mb-16">
+          <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-gray-800 mb-4 sm:mb-6">
             Master Your Next Interview with AI
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
             Upload your resume and job description, get personalized interview questions, and practice with AI-powered feedback
           </p>
           <button
             onClick={() => navigate(isAuthenticated ? '/upload' : '/signup')}
-            className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg text-lg font-semibold hover:shadow-xl transition transform hover:scale-105"
+            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg text-base sm:text-lg font-semibold hover:shadow-xl transition transform hover:scale-105"
           >
             {isAuthenticated ? 'Start New Interview' : 'Get Started Free'}
           </button>
         </div>
 
-        {/* Interview History Table */}
+        {/* Interview History */}
         {isAuthenticated && (
           <div className="max-w-7xl mx-auto">
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <div className="flex items-center justify-between mb-6">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
                 <div className="flex items-center">
-                  <TrendingUp className="w-6 h-6 mr-2 text-blue-600" />
-                  <h2 className="text-3xl font-bold text-gray-800">Your Interview History</h2>
+                  <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mr-2 text-blue-600" />
+                  <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Your Interview History</h2>
                 </div>
                 {interviews && interviews.length > 0 && (
-                  <span className="text-gray-600">
+                  <span className="text-sm sm:text-base text-gray-600">
                     {interviews.length} interview{interviews.length !== 1 ? 's' : ''}
                   </span>
                 )}
@@ -175,7 +173,8 @@ const UserHome = () => {
                 </div>
               ) : (
                 <>
-                  <div className="overflow-x-auto">
+                  {/* Desktop Table View */}
+                  <div className="hidden lg:block overflow-x-auto">
                     <table className="w-full">
                       <thead className="bg-gray-50">
                         <tr>
@@ -201,7 +200,6 @@ const UserHome = () => {
                                   {formatDate(interview.createdAt as unknown as string)}
                                 </div>
                               </td>
-                     
                               <td className="px-6 py-4">
                                 <span className="text-sm text-gray-600">
                                   {questionsCount} question{questionsCount !== 1 ? 's' : ''}
@@ -230,19 +228,17 @@ const UserHome = () => {
                                 )}
                               </td>
                               <td className="px-6 py-4">
-                                <div className="flex space-x-2">
-                                  <button
-                                    onClick={() => handleDelete(interview.id)}
-                                    disabled={deletingId === interview.id}
-                                    className="px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm disabled:opacity-50"
-                                  >
-                                    {deletingId === interview.id ? (
-                                      <Loader2 className="w-4 h-4 animate-spin" />
-                                    ) : (
-                                      <Trash2 className="w-4 h-4" />
-                                    )}
-                                  </button>
-                                </div>
+                                <button
+                                  onClick={() => handleDelete(interview.id)}
+                                  disabled={deletingId === interview.id}
+                                  className="px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm disabled:opacity-50"
+                                >
+                                  {deletingId === interview.id ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="w-4 h-4" />
+                                  )}
+                                </button>
                               </td>
                             </tr>
                           );
@@ -251,20 +247,87 @@ const UserHome = () => {
                     </table>
                   </div>
 
+                  {/* Mobile Card View */}
+                  <div className="lg:hidden space-y-4">
+                    {currentInterviews.map((interview) => {
+                      if (!interview) return null;
+                      
+                      const questionsCount = interview.questions?.length || 0;
+                      const hasScore = interview.score !== null && interview.score !== undefined;
+                      
+                      return (
+                        <div key={interview.id || Math.random()} className="bg-gray-50 rounded-lg p-4 space-y-3">
+                          {/* Date */}
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Calendar className="w-4 h-4 mr-2 flex-shrink-0" />
+                            <span className="truncate">{formatDate(interview.createdAt as unknown as string)}</span>
+                          </div>
+                          
+                          {/* Questions Count and Score Row */}
+                          <div className="flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm text-gray-600">
+                                {questionsCount} question{questionsCount !== 1 ? 's' : ''}
+                              </span>
+                            </div>
+                            
+                            {hasScore ? (
+                              <span className={`px-3 py-1 rounded-full text-sm font-bold ${getScoreColor(interview.score as number)}`}>
+                                {interview.score}/10
+                              </span>
+                            ) : (
+                              <span className="text-sm text-gray-400">Not completed</span>
+                            )}
+                          </div>
+                          
+                          {/* Status and Actions Row */}
+                          <div className="flex items-center justify-between pt-2 border-t border-gray-200">
+                            <div>
+                              {hasScore ? (
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getScoreColor(interview.score as number)}`}>
+                                  {getScoreLabel(interview.score as number)}
+                                </span>
+                              ) : (
+                                <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">
+                                  In Progress
+                                </span>
+                              )}
+                            </div>
+                            
+                            <button
+                              onClick={() => handleDelete(interview.id)}
+                              disabled={deletingId === interview.id}
+                              className="px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm disabled:opacity-50 flex items-center gap-1"
+                            >
+                              {deletingId === interview.id ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <>
+                                  <Trash2 className="w-4 h-4" />
+                                  <span className="hidden sm:inline">Delete</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
                   {/* Pagination Controls */}
                   {totalPages > 1 && (
-                    <div className="mt-6 flex items-center justify-between border-t pt-4">
-                      <div className="text-sm text-gray-600">
-                        Showing {startIndex + 1} to {Math.min(endIndex, interviews.length)} of {interviews.length} interviews
+                    <div className="mt-6 flex flex-col sm:flex-row items-center justify-between border-t pt-4 gap-4">
+                      <div className="text-xs sm:text-sm text-gray-600 order-2 sm:order-1">
+                        Showing {startIndex + 1} to {Math.min(endIndex, interviews.length)} of {interviews.length}
                       </div>
                       
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-2 order-1 sm:order-2">
                         <button
                           onClick={goToPreviousPage}
                           disabled={currentPage === 1}
-                          className="px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                          className="px-2 sm:px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
                         >
-                          <ChevronLeft className="w-5 h-5" />
+                          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                         
                         <div className="flex space-x-1">
@@ -272,7 +335,7 @@ const UserHome = () => {
                             <button
                               key={page}
                               onClick={() => goToPage(page)}
-                              className={`px-4 py-2 rounded-lg transition ${
+                              className={`px-3 sm:px-4 py-2 rounded-lg transition text-sm ${
                                 currentPage === page
                                   ? 'bg-blue-600 text-white font-semibold'
                                   : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
@@ -286,9 +349,9 @@ const UserHome = () => {
                         <button
                           onClick={goToNextPage}
                           disabled={currentPage === totalPages}
-                          className="px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                          className="px-2 sm:px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
                         >
-                          <ChevronRight className="w-5 h-5" />
+                          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                       </div>
                     </div>
@@ -305,7 +368,7 @@ const UserHome = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-4xl w-full h-[90vh] flex flex-col">
             <div className="flex items-center justify-between p-4 border-b">
-              <h3 className="text-xl font-bold text-gray-800">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800">
                 {previewDoc.type === 'resume' ? 'Resume Preview' : 'Job Description Preview'}
               </h3>
               <button
