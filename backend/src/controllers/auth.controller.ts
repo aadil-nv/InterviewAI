@@ -44,6 +44,7 @@ export class AuthController implements IAuthController {
   }
 
   async login(req: Request, res: Response): Promise<void> {
+    console.log("caling logggggggggggggggggggggggg",config.NODE_ENV === "production");
     
     try {
       const dto = req.body as LoginDTO;
@@ -51,14 +52,14 @@ export class AuthController implements IAuthController {
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE)
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: Number(config.REFRESH_TOKEN_MAX_AGE)
       });
 
@@ -72,8 +73,12 @@ export class AuthController implements IAuthController {
   }
 
   async setNewAccessToken(req: Request, res: Response): Promise<void> {
+    console.log("calling set new access token============");
+    
     try {
       const refreshToken = req.cookies.refreshToken; 
+      console.log("refresh token is ==>",req.cookies);
+      
       if (!refreshToken || !req.cookies.refreshToken) {
         res.status(HttpStatusCode.BAD_REQUEST).json({ message: "Refresh token required" });
         return;
@@ -84,7 +89,7 @@ export class AuthController implements IAuthController {
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: config.NODE_ENV === "production",
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: Number(config.ACCESS_TOKEN_MAX_AGE)
       });
 

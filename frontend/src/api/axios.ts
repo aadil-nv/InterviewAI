@@ -1,73 +1,80 @@
-import  axios, { AxiosError } from "axios";
-import type{ AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
+import type{  AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import toast from "react-hot-toast";
 import { store } from "../app/store";
 import { logout } from "../features/authSlice";
-console.log("API url is ==>",import.meta.env.VITE_API_URL);
 
-declare module 'axios' {
+const API_URL = import.meta.env.VITE_API_URL as string;
+console.log("API URL =>", API_URL);
+
+// Extend axios config for retry tracking
+declare module "axios" {
   interface InternalAxiosRequestConfig {
     _retry?: boolean;
   }
 }
 
-// Base URL
-const API_URL = import.meta.env.VITE_API_URL as string;
-console.log("API url is ==>",API_URL);
-
-
-// Create instance
+// ✅ Create a single axios instance for your app
 export const apiInstance: AxiosInstance = axios.create({
   baseURL: API_URL,
-  withCredentials: true, // you can use it for cookie if needed
+  withCredentials: true, // ✅ required for sending cookies
 });
 
-// Handle Token Refresh (optional if you have refresh flow)
+// ✅ Handle refresh token logic
 const handleTokenRefresh = async (originalRequest: InternalAxiosRequestConfig) => {
   try {
-    // Example: call refresh token endpoint if you have one
-    await axios.post(`${API_URL}/auth/refresh-token`, {}, { withCredentials: true });
+    console.log("Attempting token refresh...");
+
+    // Use the same apiInstance to preserve `withCredentials`
+    await apiInstance.post("/auth/refresh-token");
+
+    // Retry original request after refresh success
     return apiInstance(originalRequest);
-  } catch (err) {
-    await handleTokenError(err as AxiosError);
-    throw err;
+  } catch (error) {
+    console.error("Refresh token failed:", error);
+    await handleTokenError(error as AxiosError);
+    throw error;
   }
 };
 
-// Logout user on token error
+// ✅ Centralized token error handling
 const handleTokenError = async (error: AxiosError) => {
   console.error("Token error, logging out...", error);
   store.dispatch(logout());
-  const message = (error.response?.data as { message?: string })?.message || "Session expired. Logging out!";
+  const message =
+    (error.response?.data as { message?: string })?.message ||
+    "Session expired. Logging out!";
   toast.error(message);
 };
 
-// Handle other custom errors like subscription or conflicts
+// ✅ Conflict (409) handler
 const handleConflictError = (error: AxiosError) => {
-  const message = (error.response?.data as { message?: string })?.message || "An error occurred!";
+  const message =
+    (error.response?.data as { message?: string })?.message ||
+    "An error occurred!";
   toast.error(message);
 };
 
-// Response interceptor
+// ✅ Response interceptor
 apiInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as InternalAxiosRequestConfig;
 
-    // UNAUTHORIZED -> attempt refresh token once
+    // 401 = unauthorized → try refresh token once
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       return handleTokenRefresh(originalRequest);
     }
 
-    // FORBIDDEN -> logout
+    // 403 = forbidden → logout
     if (error.response?.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
       await handleTokenError(error);
       return Promise.reject(error);
     }
 
-    // CONFLICT -> show toast
+    // 409 = conflict
     if (error.response?.status === 409 && !originalRequest._retry) {
       originalRequest._retry = true;
       handleConflictError(error);
@@ -75,7 +82,9 @@ apiInstance.interceptors.response.use(
     }
 
     // Other errors
-    const message = (error.response?.data as { message?: string })?.message || error.message;
+    const message =
+      (error.response?.data as { message?: string })?.message ||
+      error.message;
     toast.error(message);
     return Promise.reject(error);
   }

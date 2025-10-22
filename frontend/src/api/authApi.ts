@@ -40,6 +40,8 @@ export const loginApi = async (payload: Omit<RegisterPayload, "userName">): Prom
       payload,
       { withCredentials: true } 
     );
+        toast.success(data.message || "Login successful!");
+
     return data;
   } catch (error: any) {
     const message = error?.response?.data?.message || "Login failed!";

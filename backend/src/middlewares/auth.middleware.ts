@@ -6,8 +6,12 @@ import { AuthRequest } from '../interfaces/authRequest.interface';
 export const authMiddleware: RequestHandler = (req, res, next) => {
   try {
     const authReq = req as unknown as AuthRequest;
+    console.log("authMiddleware: Checking for access token...",req.cookies);
+    
 
     const token = authReq.cookies?.accessToken;
+    console.log("token is =======>",token);
+    
     if (!token) {
       return res.status(HttpStatusCode.UNAUTHORIZED).json({ message: 'Unauthorized: No token provided' });
     }
