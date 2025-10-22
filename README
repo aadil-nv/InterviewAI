@@ -1,0 +1,88 @@
+# CollectPro – Collections Management Platform (MERN Stack)
+
+## 📌 Overview
+CollectPro is a high-performance collections management platform built using the MERN stack.  
+It is designed to handle **100,000+ concurrent users**, process **50,000+ API requests per minute**,  
+and deliver real-time updates for payments and account activities.
+
+This project is part of a **Senior Backend Developer Machine Test**  
+with a focus on **scalability, performance, and production readiness**.
+
+---
+
+## 🚀 Tech Stack
+### Backend
+- **Runtime:** Node.js (v18+)
+- **Framework:** Express.js
+- **Database:** MongoDB (Mongoose)
+- **Caching:** Redis
+- **Authentication:** JWT (Access & Refresh Tokens)
+- **Password Hashing:** bcrypt
+- **Queue Processing:** BullMQ + Redis
+- **Real-Time Updates:** WebSocket (Socket.io)
+- **Documentation:** Swagger (OpenAPI)
+- **Testing:** Jest + Supertest
+- **Load Testing:** Artillery / k6
+
+### Frontend
+- **Framework:** React.js (Vite or CRA)
+- **State Management:** Redux Toolkit + RTK Query
+- **UI Library:** Tailwind CSS
+- **Routing:** React Router
+- **Testing:** React Testing Library + Cypress (E2E)
+
+---
+
+## 🛠 Features
+### 1. Authentication & Security
+- User registration & login with JWT
+- Role-based access control (Admin, Manager, Agent, Viewer)
+- Password hashing using bcrypt
+- Account lockout after failed attempts
+- API rate limiting & CORS configuration
+- Input validation & sanitization
+
+### 2. Collections Management API
+- **Accounts**
+  - List accounts (pagination, filtering, sorting)
+  - Create, update, soft delete accounts
+  - Get account details by ID
+- **Payments**
+  - Record payment
+  - Payment history retrieval
+  - Update payment status
+- **Activities**
+  - Log activity
+  - View activity timeline
+  - Bulk activity retrieval
+- **Bulk Operations**
+  - Efficiently update 10,000+ accounts using queues
+  - Partial failure handling
+  - Progress tracking
+
+### 3. Performance Optimization
+- Database connection pooling
+- Proper indexing for large datasets
+- Redis caching for frequently accessed data
+- API response caching with invalidation
+- Horizontal scaling support
+
+### 4. Real-Time Features
+- Live payment notifications
+- Activity feed streaming
+- Dashboard auto-refresh
+
+### 5. Monitoring & Logs
+- Winston logger
+- API performance metrics
+- Database query tracking
+- Health check endpoints
+
+---
+
+## 📂 Project Structure
+
+Start Backend           = npm start
+ERROR Checking (Jest)   = npx tsc --noEmit
+Start Redis in Docker   = docker start my-redis
+Run Testing             = npx jest
