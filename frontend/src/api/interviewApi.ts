@@ -1,6 +1,6 @@
 import { apiInstance } from './axios';
 import toast from 'react-hot-toast';
-import type { CreateInterviewRequest, DeleteInterviewResponse, GetAllInterviewsResponse, Interview, SubmitInterviewResponse } from '../interfaces/types';
+import type { CreateInterviewRequest, DeleteInterviewResponse, GetAllInterviewsResponse, SubmitInterviewResponse } from '../interfaces/types';
 
 
 
