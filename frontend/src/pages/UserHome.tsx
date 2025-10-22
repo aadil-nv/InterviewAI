@@ -15,6 +15,9 @@ import type { RootState } from '../app/store';
 import type { Interview } from '../interfaces/types';
 import { deleteInterviewAPI, getAllInterviewsAPI } from '../api/interviewApi';
 import Navigation from '../components/Navigation';
+import ConfirmDeleteModal from '../components/ConfirmModel';
+
+
 
 const UserHome = () => {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
@@ -26,6 +29,8 @@ const UserHome = () => {
   const [loading, setLoading] = useState(false);
   const [previewDoc, setPreviewDoc] = useState<{ url: string; type: 'resume' | 'jd' } | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [interviewToDelete, setInterviewToDelete] = useState<string | null>(null);
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,25 +56,38 @@ const UserHome = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this interview?')) return;
+  const handleDeleteClick = (id: string) => {
+    setInterviewToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!interviewToDelete) return;
 
     try {
-      setDeletingId(id);
-      await deleteInterviewAPI(id);
-      setInterviews(interviews.filter(i => i.id !== id));
+      setDeletingId(interviewToDelete);
+      await deleteInterviewAPI(interviewToDelete);
+      setInterviews(interviews.filter(i => i.id !== interviewToDelete));
       
       // Adjust current page if necessary after deletion
       const totalPages = Math.ceil((interviews.length - 1) / itemsPerPage);
       if (currentPage > totalPages && currentPage > 1) {
         setCurrentPage(totalPages);
       }
+      
+      setShowDeleteModal(false);
+      setInterviewToDelete(null);
     } catch (error) {
       console.error('Failed to delete interview:', error);
       alert('Failed to delete interview. Please try again.');
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setInterviewToDelete(null);
   };
 
   const formatDate = (dateString: string) => {
@@ -226,7 +244,7 @@ const UserHome = () => {
                               </td>
                               <td className="px-6 py-4">
                                 <button
-                                  onClick={() => handleDelete(interview.id)}
+                                  onClick={() => handleDeleteClick(interview.id)}
                                   disabled={deletingId === interview.id}
                                   className="px-3 py-1 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm disabled:opacity-50"
                                 >
@@ -291,7 +309,7 @@ const UserHome = () => {
                             </div>
                             
                             <button
-                              onClick={() => handleDelete(interview.id)}
+                              onClick={() => handleDeleteClick(interview.id)}
                               disabled={deletingId === interview.id}
                               className="px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition text-sm disabled:opacity-50 flex items-center gap-1"
                             >
@@ -357,6 +375,14 @@ const UserHome = () => {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmDeleteModal
+        isOpen={showDeleteModal}
+        onClose={handleDeleteCancel}
+        onConfirm={handleDeleteConfirm}
+        loading={deletingId !== null}
+      />
 
       {previewDoc && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
